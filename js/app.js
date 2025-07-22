@@ -2238,19 +2238,27 @@ const pjaxReload = function () {
   pageScroll(0);
 }
 
-const siteRefresh = function (reload) {
-  LOCAL_HASH = 0
-  LOCAL_URL = window.location.href
+function fixCommentLinks() {
+  const links = document.querySelectorAll('.leancloud-recent-comment a');
+  if (links.length === 0) {
+    setTimeout(fixCommentLinks, 300);
+    return;
+  }
+  links.forEach(a => {
+    const href = a.getAttribute('href');
+    if (href && !href.startsWith('/Bananaki/')) {
+      a.setAttribute('href', '/Bananaki' + (href.startsWith('/') ? '' : '/') + href);
+    }
+  });
+}
 
-  vendorCss('katex');
-  vendorJs('copy_tex');
-  vendorCss('mermaid');
-  vendorJs('chart');
+const siteRefresh = function (reload) {
+
   vendorJs('valine', function() {
     var options = Object.assign({}, CONFIG.valine);
     options = Object.assign(options, LOCAL.valine||{});
     options.el = '#comments';
-    options.pathname = LOCAL.path;
+    options.pathname = '/Bananaki/' + LOCAL.path.replace(/^\//, '');
     options.pjax = pjax;
     options.lazyload = lazyload;
 
@@ -2259,6 +2267,7 @@ const siteRefresh = function (reload) {
     setTimeout(function(){
       positionInit(1);
       postFancybox('.v');
+      fixCommentLinks();
     }, 1000);
   }, window.MiniValine);
 
