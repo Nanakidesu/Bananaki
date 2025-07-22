@@ -2192,7 +2192,7 @@ const algoliaSearch = function(pjax) {
 const domInit = function() {
   $.each('.overview .menu > .item', function(el) {
     siteNav.child('.menu').appendChild(el.cloneNode(true));
-  })
+  });
 
   loadCat.addEventListener('click', Loader.vanish);
   menuToggle.addEventListener('click', sideBarToggleHandle);
@@ -2217,27 +2217,28 @@ const domInit = function() {
   goToComment.addEventListener('click', goToCommentHandle);
   showContents.addEventListener('click', sideBarToggleHandle);
 
-  mediaPlayer(toolPlayer)
+  mediaPlayer(toolPlayer);
   $('main').addEventListener('click', function() {
-    toolPlayer.player.mini()
-  })
+    toolPlayer.player.mini();
+  });
 }
 
 const pjaxReload = function () {
-  pagePosition()
+  pagePosition();
 
   if(sideBar.hasClass('on')) {
     transition(sideBar, function () {
-        sideBar.removeClass('on');
-        menuToggle.removeClass('close');
-      }); // 'transition.slideRightOut'
+      sideBar.removeClass('on');
+      menuToggle.removeClass('close');
+    }); // 'transition.slideRightOut'
   }
 
-  $('#main').innerHTML = ''
+  $('#main').innerHTML = '';
   $('#main').appendChild(loadCat.lastChild.cloneNode(true));
   pageScroll(0);
 }
 
+// 只给最新评论的链接修正路径，避免影响评论区请求
 function fixCommentLinks() {
   const links = document.querySelectorAll('.leancloud-recent-comment a');
   if (links.length === 0) {
@@ -2246,8 +2247,8 @@ function fixCommentLinks() {
   }
   links.forEach(a => {
     const href = a.getAttribute('href');
-    if (href && !href.startsWith('/Bananaki/')) {
-      a.setAttribute('href', '/Bananaki' + (href.startsWith('/') ? '' : '/') + href);
+    if (href && href.startsWith('/') && !href.startsWith('/Bananaki/')) {
+      a.setAttribute('href', '/Bananaki' + href);
     }
   });
 }
@@ -2258,7 +2259,8 @@ const siteRefresh = function (reload) {
     var options = Object.assign({}, CONFIG.valine);
     options = Object.assign(options, LOCAL.valine||{});
     options.el = '#comments';
-    options.pathname = '/Bananaki/' + LOCAL.path.replace(/^\//, '');
+    // pathname不加 /Bananaki/, 保持相对路径即可
+    options.pathname = LOCAL.path.replace(/^\//, '');
     options.pjax = pjax;
     options.lazyload = lazyload;
 
@@ -2275,72 +2277,70 @@ const siteRefresh = function (reload) {
     $.each('script[data-pjax]', pjaxScript);
   }
 
-  originTitle = document.title
+  originTitle = document.title;
 
-  resizeHandle()
+  resizeHandle();
 
-  menuActive()
+  menuActive();
 
-  sideBarTab()
-  sidebarTOC()
+  sideBarTab();
+  sidebarTOC();
 
-  registerExtURL()
-  postBeauty()
-  tabFormat()
+  registerExtURL();
+  postBeauty();
+  tabFormat();
 
-  toolPlayer.player.load(LOCAL.audio || CONFIG.audio || {})
+  toolPlayer.player.load(LOCAL.audio || CONFIG.audio || {});
 
-  Loader.hide()
+  Loader.hide();
 
   setTimeout(function(){
-    positionInit()
+    positionInit();
   }, 500);
 
-  cardActive()
+  cardActive();
 
-  lazyload.observe()
+  lazyload.observe();
 }
 
 const siteInit = function () {
 
-  domInit()
+  domInit();
 
   pjax = new Pjax({
-            selectors: [
-              'head title',
-              '.languages',
-              '.pjax',
-              'script[data-config]'
-            ],
-            analytics: false,
-            cacheBust: false
-          })
+    selectors: [
+      'head title',
+      '.languages',
+      '.pjax',
+      'script[data-config]'
+    ],
+    analytics: false,
+    cacheBust: false
+  });
 
-  CONFIG.quicklink.ignores = LOCAL.ignores
-  quicklink.listen(CONFIG.quicklink)
+  CONFIG.quicklink.ignores = LOCAL.ignores;
+  quicklink.listen(CONFIG.quicklink);
 
-  //visibilityListener()//
-  themeColorListener()
+  themeColorListener();
 
-  algoliaSearch(pjax)
+  algoliaSearch(pjax);
 
-  window.addEventListener('scroll', scrollHandle)
+  window.addEventListener('scroll', scrollHandle);
 
-  window.addEventListener('resize', resizeHandle)
+  window.addEventListener('resize', resizeHandle);
 
-  window.addEventListener('pjax:send', pjaxReload)
+  window.addEventListener('pjax:send', pjaxReload);
 
-  window.addEventListener('pjax:success', siteRefresh)
+  window.addEventListener('pjax:success', siteRefresh);
 
   window.addEventListener('beforeunload', function() {
-    pagePosition()
-  })
+    pagePosition();
+  });
 
-  siteRefresh(1)
+  siteRefresh(1);
 }
 
 window.addEventListener('DOMContentLoaded', siteInit);
-
 var canvasEl = document.createElement('canvas');
 canvasEl.style.cssText = 'position:fixed;top:0;left:0;pointer-events:none;z-index:9999999';
 document.body.appendChild(canvasEl);
