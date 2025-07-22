@@ -163,19 +163,19 @@ Ba nanaki = 死にたい自分を押し殺して</title>
   <div class="body md" itemprop="articleBody">
     
 
-    <h1 id="hexo使用leancloud获取路径不适配问题"><a class="markdownIt-Anchor" href="#hexo使用leancloud获取路径不适配问题">#</a> Hexo 使用 LeanCloud 获取路径不适配问题</h1>
+    <h1 id="hexo使用leancloud获取路径不适配问题"><a class="anchor" href="#hexo使用leancloud获取路径不适配问题">#</a> Hexo 使用 LeanCloud 获取路径不适配问题</h1>
 <p>最近在我使用最新评论跳转 post 时遇到了评论链接路径不正确的问题。网站部署在 GitHub Pages 的子目录  <code>/Bananaki/</code>  下，但最新评论跳转链接却没有包含该子目录，导致页面跳转失败。</p>
-<h2 id="问题表现"><a class="markdownIt-Anchor" href="#问题表现">#</a> 问题表现</h2>
-<p>最新评论的链接形式为：<br>
- <code>/2025/07/21/日本語テスト/#687d6c11995fce229a966375</code> <br>
- 但实际正确的路径应该是：<br>
- <code>/Bananaki/2025/07/21/日本語テスト/#687d6c11995fce229a966375</code> <br>
+<h2 id="问题表现"><a class="anchor" href="#问题表现">#</a> 问题表现</h2>
+<p>最新评论的链接形式为：<br />
+ <code>/2025/07/21/日本語テスト/#687d6c11995fce229a966375</code> <br />
+ 但实际正确的路径应该是：<br />
+ <code>/Bananaki/2025/07/21/日本語テスト/#687d6c11995fce229a966375</code> <br />
  缺少了  <code>/Bananaki/</code>  前缀。</p>
-<h2 id="尝试过的方案"><a class="markdownIt-Anchor" href="#尝试过的方案">#</a> 尝试过的方案</h2>
+<h2 id="尝试过的方案"><a class="anchor" href="#尝试过的方案">#</a> 尝试过的方案</h2>
 <p>最初在 Valine 配置中尝试修改  <code>pathname</code> ：</p>
-<figure class="highlight js"><figcaption><span>"pjax"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.<span class="property">pathname</span> = <span class="string">&#x27;/Bananaki/&#x27;</span> + <span class="variable constant_">LOCAL</span>.<span class="property">path</span>.<span class="title function_">replace</span>(<span class="regexp">/^\//</span>, <span class="string">&#x27;&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p><figure class="highlight js"><figcaption><span>"pjax"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">options.<span class="property">pathname</span> = <span class="string">&#x27;/Bananaki/&#x27;</span> + <span class="variable constant_">LOCAL</span>.<span class="property">path</span>.<span class="title function_">replace</span>(<span class="regexp">/^\//</span>, <span class="string">&#x27;&#x27;</span>);</span><br></pre></td></tr></table></figure></p>
 <p>虽然 Valine 评论功能正常，但 LeanCloud 最新评论组件生成的评论链接并没有被影响，仍旧缺少了子目录路径。</p>
-<h2 id="解决方案"><a class="markdownIt-Anchor" href="#解决方案">#</a> 解决方案</h2>
+<h2 id="解决方案"><a class="anchor" href="#解决方案">#</a> 解决方案</h2>
 <p>经过调试，发现 LeanCloud 评论列表是动态渲染的 DOM 元素，Valine 的路径配置无法直接影响这些链接。</p>
 <p>因此采用了前端 JS 动态修改的方法：</p>
 <ul>
@@ -183,17 +183,17 @@ Ba nanaki = 死にたい自分を押し殺して</title>
 <li>如果链接地址不包含  <code>/Bananaki/</code>  前缀，则自动插入。</li>
 <li>通过定时器保证在内容加载完成后执行修正。</li>
 </ul>
-<h3 id="代码示例"><a class="markdownIt-Anchor" href="#代码示例">#</a> 代码示例</h3>
-<figure class="highlight js"><figcaption><span>"pjax"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fixCommentLinks</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> links = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.leancloud-recent-comment a&#x27;</span>);</span><br><span class="line">  <span class="keyword">if</span> (links.<span class="property">length</span> === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果评论还没加载完成，延迟重试</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(fixCommentLinks, <span class="number">300</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  links.<span class="title function_">forEach</span>(<span class="function"><span class="params">a</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> href = a.<span class="title function_">getAttribute</span>(<span class="string">&#x27;href&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (href &amp;&amp; !href.<span class="title function_">startsWith</span>(<span class="string">&#x27;/Bananaki/&#x27;</span>)) &#123;</span><br><span class="line">      a.<span class="title function_">setAttribute</span>(<span class="string">&#x27;href&#x27;</span>, <span class="string">&#x27;/Bananaki&#x27;</span> + (href.<span class="title function_">startsWith</span>(<span class="string">&#x27;/&#x27;</span>) ? <span class="string">&#x27;&#x27;</span> : <span class="string">&#x27;/&#x27;</span>) + href);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Valine初始化后调用</span></span><br><span class="line"><span class="title function_">vendorJs</span>(<span class="string">&#x27;valine&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> options = <span class="title class_">Object</span>.<span class="title function_">assign</span>(&#123;&#125;, <span class="variable constant_">CONFIG</span>.<span class="property">valine</span>);</span><br><span class="line">  options = <span class="title class_">Object</span>.<span class="title function_">assign</span>(options, <span class="variable constant_">LOCAL</span>.<span class="property">valine</span> || &#123;&#125;);</span><br><span class="line">  options.<span class="property">el</span> = <span class="string">&#x27;#comments&#x27;</span>;</span><br><span class="line">  options.<span class="property">pathname</span> = <span class="string">&#x27;/Bananaki/&#x27;</span> + <span class="variable constant_">LOCAL</span>.<span class="property">path</span>.<span class="title function_">replace</span>(<span class="regexp">/^\//</span>, <span class="string">&#x27;&#x27;</span>);</span><br><span class="line">  options.<span class="property">pjax</span> = pjax;</span><br><span class="line">  options.<span class="property">lazyload</span> = lazyload;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">new</span> <span class="title class_">MiniValine</span>(options);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">fixCommentLinks</span>();</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;, <span class="variable language_">window</span>.<span class="property">MiniValine</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="新增问题"><a class="markdownIt-Anchor" href="#新增问题">#</a> 新增问题</h2>
+<h3 id="代码示例"><a class="anchor" href="#代码示例">#</a> 代码示例</h3>
+<p><figure class="highlight js"><figcaption><span>"pjax"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fixCommentLinks</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> links = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.leancloud-recent-comment a&#x27;</span>);</span><br><span class="line">  <span class="keyword">if</span> (links.<span class="property">length</span> === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果评论还没加载完成，延迟重试</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(fixCommentLinks, <span class="number">300</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  links.<span class="title function_">forEach</span>(<span class="function"><span class="params">a</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> href = a.<span class="title function_">getAttribute</span>(<span class="string">&#x27;href&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (href &amp;&amp; !href.<span class="title function_">startsWith</span>(<span class="string">&#x27;/Bananaki/&#x27;</span>)) &#123;</span><br><span class="line">      a.<span class="title function_">setAttribute</span>(<span class="string">&#x27;href&#x27;</span>, <span class="string">&#x27;/Bananaki&#x27;</span> + (href.<span class="title function_">startsWith</span>(<span class="string">&#x27;/&#x27;</span>) ? <span class="string">&#x27;&#x27;</span> : <span class="string">&#x27;/&#x27;</span>) + href);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Valine初始化后调用</span></span><br><span class="line"><span class="title function_">vendorJs</span>(<span class="string">&#x27;valine&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> options = <span class="title class_">Object</span>.<span class="title function_">assign</span>(&#123;&#125;, <span class="variable constant_">CONFIG</span>.<span class="property">valine</span>);</span><br><span class="line">  options = <span class="title class_">Object</span>.<span class="title function_">assign</span>(options, <span class="variable constant_">LOCAL</span>.<span class="property">valine</span> || &#123;&#125;);</span><br><span class="line">  options.<span class="property">el</span> = <span class="string">&#x27;#comments&#x27;</span>;</span><br><span class="line">  options.<span class="property">pathname</span> = <span class="string">&#x27;/Bananaki/&#x27;</span> + <span class="variable constant_">LOCAL</span>.<span class="property">path</span>.<span class="title function_">replace</span>(<span class="regexp">/^\//</span>, <span class="string">&#x27;&#x27;</span>);</span><br><span class="line">  options.<span class="property">pjax</span> = pjax;</span><br><span class="line">  options.<span class="property">lazyload</span> = lazyload;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">new</span> <span class="title class_">MiniValine</span>(options);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">fixCommentLinks</span>();</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;, <span class="variable language_">window</span>.<span class="property">MiniValine</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h2 id="新增问题"><a class="anchor" href="#新增问题">#</a> 新增问题</h2>
 <p>在完成了针对 LeanCloud 最新评论路径的修正后，发现启用 PJAX 后，文章页面的评论区评论无法正常显示。具体表现为：</p>
 <ul>
 <li>首页和其他页面的最新评论加载正常；</li>
 <li>进入具体文章页面时，评论区虽被初始化，但评论内容不显示。</li>
 </ul>
 <p>该问题源于 PJAX 仅局部刷新页面，Valine 评论组件未能在每次 PJAX 成功后正确重新初始化。</p>
-<hr>
-<h2 id="解决办法"><a class="markdownIt-Anchor" href="#解决办法">#</a> 解决办法</h2>
+<hr />
+<h2 id="解决办法"><a class="anchor" href="#解决办法">#</a> 解决办法</h2>
 <p>针对 PJAX 的特点，调整页面刷新逻辑：</p>
 <ul>
 <li>在  <code>pjax:success</code>  事件中重新初始化 Valine 评论实例，确保评论区内容重新加载；</li>
@@ -201,8 +201,8 @@ Ba nanaki = 死にたい自分を押し殺して</title>
 <li>通过延时执行，确保 DOM 渲染完毕后再操作评论相关元素。</li>
 </ul>
 <p>示例关键代码：</p>
-<figure class="highlight js"><figcaption><span>"pjax"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;pjax:success&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 重新初始化 Valine 评论</span></span><br><span class="line">  <span class="title function_">vendorJs</span>(<span class="string">&#x27;valine&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> options = <span class="title class_">Object</span>.<span class="title function_">assign</span>(&#123;&#125;, <span class="variable constant_">CONFIG</span>.<span class="property">valine</span>, <span class="variable constant_">LOCAL</span>.<span class="property">valine</span> || &#123;&#125;);</span><br><span class="line">    options.<span class="property">el</span> = <span class="string">&#x27;#comments&#x27;</span>;</span><br><span class="line">    options.<span class="property">pathname</span> = <span class="string">&#x27;/Bananaki/&#x27;</span> + <span class="variable constant_">LOCAL</span>.<span class="property">path</span>.<span class="title function_">replace</span>(<span class="regexp">/^\//</span>, <span class="string">&#x27;&#x27;</span>);</span><br><span class="line">    options.<span class="property">pjax</span> = pjax;</span><br><span class="line">    options.<span class="property">lazyload</span> = lazyload;</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">MiniValine</span>(options);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">fixCommentLinks</span>();</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;, <span class="variable language_">window</span>.<span class="property">MiniValine</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="其他相关改动说明"><a class="markdownIt-Anchor" href="#其他相关改动说明">#</a> 其他相关改动说明</h2>
+<p><figure class="highlight js"><figcaption><span>"pjax"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;pjax:success&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 重新初始化 Valine 评论</span></span><br><span class="line">  <span class="title function_">vendorJs</span>(<span class="string">&#x27;valine&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> options = <span class="title class_">Object</span>.<span class="title function_">assign</span>(&#123;&#125;, <span class="variable constant_">CONFIG</span>.<span class="property">valine</span>, <span class="variable constant_">LOCAL</span>.<span class="property">valine</span> || &#123;&#125;);</span><br><span class="line">    options.<span class="property">el</span> = <span class="string">&#x27;#comments&#x27;</span>;</span><br><span class="line">    options.<span class="property">pathname</span> = <span class="string">&#x27;/Bananaki/&#x27;</span> + <span class="variable constant_">LOCAL</span>.<span class="property">path</span>.<span class="title function_">replace</span>(<span class="regexp">/^\//</span>, <span class="string">&#x27;&#x27;</span>);</span><br><span class="line">    options.<span class="property">pjax</span> = pjax;</span><br><span class="line">    options.<span class="property">lazyload</span> = lazyload;</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">MiniValine</span>(options);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">fixCommentLinks</span>();</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;, <span class="variable language_">window</span>.<span class="property">MiniValine</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h2 id="其他相关改动说明"><a class="anchor" href="#其他相关改动说明">#</a> 其他相关改动说明</h2>
 <ul>
 <li>在  <code>siteRefresh</code>  函数中，Valine 初始化完成后调用  <code>fixCommentLinks()</code> ，确保最新评论链接正确。</li>
 <li><code>fixCommentLinks</code>  函数支持延迟重试，保证评论链接在内容加载完成后被修正。</li>
@@ -210,7 +210,7 @@ Ba nanaki = 死にたい自分を押し殺して</title>
 <li>仅针对  <code>.leancloud-recent-comment a</code>  链接进行路径修正，避免影响其他页面内容。</li>
 <li>结合 PJAX 刷新机制，确保每次页面切换时评论区和最新评论均能正确加载显示。</li>
 </ul>
-<h2 id="总结"><a class="markdownIt-Anchor" href="#总结">#</a> 总结</h2>
+<h2 id="总结"><a class="anchor" href="#总结">#</a> 总结</h2>
 <ul>
 <li>网站部署在子目录时，动态加载的 LeanCloud 评论路径需要特殊处理，防止跳转错误。</li>
 <li>仅修改 Valine 配置无法完全解决最新评论链接路径问题，需配合前端脚本修正。</li>
@@ -307,6 +307,14 @@ Ba nanaki = 死にたい自分を押し殺して</title>
 
     </div>
     <div class="item right">
+      
+
+  <a href="/Bananaki/2025/07/22/%E5%A5%B3%E6%80%A7%E5%A3%B0%E4%BC%98%E2%80%94%E2%80%94%E5%8A%A0%E9%9A%88%E4%BA%9C%E8%A1%A3/" itemprop="url" rel="next" data-background-image="&#x2F;Bananaki&#x2F;images&#x2F;kakuma1.jpg" title="声优专题：加隈亜衣——温柔治愈系的声音魔法">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 女性声优</span>
+  <h3>声优专题：加隈亜衣——温柔治愈系的声音魔法</h3>
+  </a>
+
     </div>
 </div>
 
@@ -341,7 +349,7 @@ Ba nanaki = 死にたい自分を押し殺して</title>
 <nav class="state">
     <div class="item posts">
       <a href="/Bananaki/archives/">
-        <span class="count">6</span>
+        <span class="count">7</span>
         <span class="name">文章</span>
       </a>
     </div>
@@ -353,7 +361,7 @@ Ba nanaki = 死にたい自分を押し殺して</title>
     </div>
     <div class="item tags">
       <a href="/Bananaki/tags/">
-        <span class="count">17</span>
+        <span class="count">18</span>
         <span class="name">标签</span>
       </a>
     </div>
@@ -410,10 +418,12 @@ Ba nanaki = 死にたい自分を押し殺して</title>
 
   <ul id="quick">
     <li class="prev pjax">
+        <a href="/Bananaki/2025/07/22/%E6%97%A5%E8%AF%AD%E5%AD%A6%E4%B9%A0-%E4%BA%AC%E9%83%BD%E5%BC%81%E7%AF%87/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
     </li>
     <li class="up"><i class="ic i-arrow-up"></i></li>
     <li class="down"><i class="ic i-arrow-down"></i></li>
     <li class="next pjax">
+        <a href="/Bananaki/2025/07/22/%E5%A5%B3%E6%80%A7%E5%A3%B0%E4%BC%98%E2%80%94%E2%80%94%E5%8A%A0%E9%9A%88%E4%BA%9C%E8%A1%A3/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
     </li>
     <li class="percent"></li>
   </ul>
@@ -445,6 +455,16 @@ Ba nanaki = 死にたい自分を押し殺して</title>
   <li class="item">
     
 <div class="breadcrumb">
+<a href="/Bananaki/categories/wseeu/" title="分类于 女性声优">女性声优</a>
+</div>
+
+    <span><a href="/Bananaki/2025/07/21/%E5%A5%B3%E6%80%A7%E5%A3%B0%E4%BC%98%E2%80%94%E2%80%94%E6%97%A5%E7%AC%A0%E9%98%B3%E5%AD%90/" title="声优专题：日笠陽子——无与伦比的声线魅力与人格魅力">声优专题：日笠陽子——无与伦比的声线魅力与人格魅力</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
 <a href="/Bananaki/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/" title="分类于 开发日志">开发日志</a>
 </div>
 
@@ -465,10 +485,10 @@ Ba nanaki = 死にたい自分を押し殺して</title>
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/Bananaki/categories/nihongo/" title="分类于 日語学習">日語学習</a>
+<a href="/Bananaki/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/" title="分类于 开发日志">开发日志</a>
 </div>
 
-    <span><a href="/Bananaki/2025/07/22/%E6%97%A5%E8%AF%AD%E5%AD%A6%E4%B9%A0-%E4%BA%AC%E9%83%BD%E5%BC%81%E7%AF%87/" title="日語&lt;ruby&gt;学習&lt;rt&gt;がくしゅう&lt;&#x2F;rt&gt;&lt;&#x2F;ruby&gt;ガイド：京都篇">日語<ruby>学習<rt>がくしゅう</rt></ruby>ガイド：京都篇</a></span>
+    <span><a href="/Bananaki/2025/07/20/%E7%B1%B3%E9%A5%AD%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%BC%80%E8%AE%BE%E5%95%A6%EF%BC%81/" title="米饭个人博客开设啦！">米饭个人博客开设啦！</a></span>
   </li>
 
       
@@ -478,17 +498,17 @@ Ba nanaki = 死にたい自分を押し殺して</title>
 <a href="/Bananaki/categories/wseeu/" title="分类于 女性声优">女性声优</a>
 </div>
 
-    <span><a href="/Bananaki/2025/07/21/%E5%A5%B3%E6%80%A7%E5%A3%B0%E4%BC%98%E2%80%94%E2%80%94%E6%97%A5%E7%AC%A0%E9%98%B3%E5%AD%90/" title="声优专题：日笠陽子——无与伦比的声线魅力与人格魅力">声优专题：日笠陽子——无与伦比的声线魅力与人格魅力</a></span>
+    <span><a href="/Bananaki/2025/07/22/%E5%A5%B3%E6%80%A7%E5%A3%B0%E4%BC%98%E2%80%94%E2%80%94%E5%8A%A0%E9%9A%88%E4%BA%9C%E8%A1%A3/" title="声优专题：加隈亜衣——温柔治愈系的声音魔法">声优专题：加隈亜衣——温柔治愈系的声音魔法</a></span>
   </li>
 
       
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/Bananaki/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/" title="分类于 开发日志">开发日志</a>
+<a href="/Bananaki/categories/nihongo/" title="分类于 日語学習">日語学習</a>
 </div>
 
-    <span><a href="/Bananaki/2025/07/20/%E7%B1%B3%E9%A5%AD%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%BC%80%E8%AE%BE%E5%95%A6%EF%BC%81/" title="米饭个人博客开设啦！">米饭个人博客开设啦！</a></span>
+    <span><a href="/Bananaki/2025/07/22/%E6%97%A5%E8%AF%AD%E5%AD%A6%E4%B9%A0-%E4%BA%AC%E9%83%BD%E5%BC%81%E7%AF%87/" title="日語&lt;ruby&gt;学習&lt;rt&gt;がくしゅう&lt;&#x2F;rt&gt;&lt;&#x2F;ruby&gt;ガイド：京都篇">日語<ruby>学習<rt>がくしゅう</rt></ruby>ガイド：京都篇</a></span>
   </li>
 
   </ul>
