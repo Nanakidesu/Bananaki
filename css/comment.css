@@ -268,6 +268,9 @@
   margin-right: 0.5rem;
   background-color: var(--color-grey);
 }
+.v .item .tag.afk {
+  background-color: var(--color-red);
+}
 .v .item .tag.mseeu {
   background-color: var(--color-orange);
 }
