@@ -268,13 +268,13 @@
   margin-right: 0.5rem;
   background-color: var(--color-grey);
 }
-.v .item .tag.master {
+.v .item .tag.mseeu {
   background-color: var(--color-orange);
 }
 .v .item .tag.friend {
   background-color: var(--color-yellow);
 }
-.v .item .tag.investor {
+.v .item .tag.wseeu {
   background-color: var(--color-pink);
 }
 .v .item .tag.admin {

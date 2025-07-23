@@ -581,6 +581,30 @@ details summary::before {
 .i-cloud-music:before {
   content: "\e76a";
 }
+@font-face {
+  font-family: 'icomoon-pixiv';
+  src: url("/Bananaki/fonts/pixiv/icomoon.eot?x5y5po");
+  src: url("/Bananaki/fonts/pixiv/icomoon.eot?x5y5po#iefix") format('embedded-opentype'), url("/Bananaki/fonts/pixiv/icomoon.ttf?x5y5po") format('truetype'), url("/Bananaki/fonts/pixiv/icomoon.woff?x5y5po") format('woff'), url("/Bananaki/fonts/pixiv/icomoon.svg?x5y5po#icomoon") format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+.i-pixiv:before {
+  font-family: 'icomoon-pixiv' !important;
+  content: "\e900";
+}
+@font-face {
+  font-family: 'icomoon';
+  src: url("/Bananaki/fonts/bilibili/icomoon.eot?4f00ag");
+  src: url("/Bananaki/fonts/bilibili/icomoon.eot?4f00ag#iefix") format('embedded-opentype'), url("/Bananaki/fonts/bilibili/icomoon.ttf?4f00ag") format('truetype'), url("/Bananaki/fonts/bilibili/icomoon.woff?4f00ag") format('woff'), url("/Bananaki/fonts/bilibili/icomoon.svg?4f00ag#icomoon") format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+.i-bilibili:before {
+  font-family: 'icomoon' !important;
+  content: "\e901";
+}
 html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
@@ -2930,17 +2954,23 @@ main >.inner {
   top: -10%;
   left: -10%;
 }
-.social .item.t::before {
-  background-color: itte;
-}
-.social .item.t i {
-  color: itte;
-}
-.social .item.h::before {
+.social .item.twitter::before {
   background-color: #00aff0;
 }
-.social .item.h i {
+.social .item.twitter i {
   color: #00aff0;
+}
+.social .item.pixiv::before {
+  background-color: #00a0ff;
+}
+.social .item.pixiv i {
+  color: #00a0ff;
+}
+.social .item.bilibili::before {
+  background-color: #FF66AA;
+}
+.social .item.bilibili i {
+  color: #FF66AA;
 }
 .social .item:focus i,
 .social .item:hover i {
