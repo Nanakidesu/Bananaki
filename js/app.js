@@ -2341,7 +2341,8 @@ function installWalineUserTags() {
     '44686996ad7bb39b173921f7de30a20f': { key: 'friend', text: '伙伴' },
     '0eab5cedc2ee834ba1061c0f112667e0': { key: 'wseeu', text: '女性声优' },
     '41b8ff29dc5048d630a2e0f841147777': { key: 'admin', text: '站主' },
-    '8b3c3e26fd57908d74ba8cdcfa89e969': { key: 'admin', text: '站主' }
+    '8b3c3e26fd57908d74ba8cdcfa89e969': { key: 'admin', text: '站主' },
+    'e91481be87278cc6023f5661fae84a03': { key: 'admin', text: '站主' }
   };
 
   var renderTags = function() {
