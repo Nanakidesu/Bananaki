@@ -2253,7 +2253,50 @@ function fixCommentLinks() {
   });
 }
 
+function loadWalineRecentComments() {
+  var list = document.querySelector('.waline-recent-comment');
+  if (!list || !CONFIG.waline || !CONFIG.waline.serverURL) return;
+
+  var server = CONFIG.waline.serverURL;
+  if (server.endsWith('/')) server = server.slice(0, -1);
+
+  fetch(server + '/api/comment?type=recent&count=5&lang=' + encodeURIComponent(CONFIG.waline.lang || 'zh-CN'))
+    .then(function(response) {
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      return response.json();
+    })
+    .then(function(result) {
+      var comments = result.data || [];
+      list.innerHTML = '';
+
+      comments.forEach(function(item) {
+        var li = document.createElement('li');
+        li.className = 'item';
+
+        var link = document.createElement('a');
+        var path = item.url || '';
+        while (path.charAt(0) === '/') path = path.slice(1);
+        link.href = CONFIG.root + path;
+
+        var temp = document.createElement('div');
+        temp.innerHTML = item.comment || '';
+        var preview = (temp.textContent || temp.innerText || '').trim();
+        if (preview.length > 42) preview = preview.slice(0, 42) + '…';
+        link.textContent = (item.nick || '访客') + '：' + preview;
+        link.title = link.textContent;
+
+        li.appendChild(link);
+        list.appendChild(li);
+      });
+    })
+    .catch(function(error) {
+      console.error('Waline recent comments failed to load:', error);
+    });
+}
+
 const siteRefresh = function (reload) {
+
+  loadWalineRecentComments();
 
   if (LOCAL.waline && $('#comments')) {
     vendorCss('waline');
