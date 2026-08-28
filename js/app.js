@@ -1,4 +1,4 @@
-var CONFIG = {"version":"0.2.5","hostname":"https://nanakidesu.github.io/Bananaki","root":"/Bananaki/","statics":"/","favicon":{"normal":"images/favicon.ico","hidden":"images/failure.ico"},"darkmode":"ture","auto_scroll":true,"js":{"waline":"https://unpkg.com/@waline/client@v3/dist/waline.umd.js","chart":"npm/frappe-charts@1.5.0/dist/frappe-charts.min.iife.min.js","copy_tex":"npm/katex@0.12.0/dist/contrib/copy-tex.min.js","fancybox":"combine/npm/jquery@3.5.1/dist/jquery.min.js,npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js,npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"},"css":{"waline":"https://unpkg.com/@waline/client@v3/dist/waline.css","katex":"npm/katex@0.12.0/dist/katex.min.css","mermaid":"css/mermaid.css","fancybox":"combine/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css,npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"},"loader":{"start":true,"switch":true},"search":{"applicationID":"3E5IXWGRYS","apiKey":"c56f99fe7b418ffe491bee5fb89cfe82","indexName":"blog","hits":{"per_page":10}},"waline":{"serverURL":"https://bananaki-waline.vercel.app","lang":"zh-CN","pageSize":10,"pageview":true,"login":"enable"},"quicklink":{"timeout":3000,"priority":true},"audio":[{"title":"列表1","list":["https://music.163.com/#/playlist?id=10182123823"]},{"title":"列表2","list":["https://music.163.com/#/playlist?id=10017270914"]}],"fireworks":["rgba(255,182,185,.9)","rgba(250,227,217,.9)","rgba(187,222,214,.9)","rgba(138,198,209,.9)"]};const getRndInteger = function (min, max) {
+var CONFIG = {"version":"0.2.5","hostname":"https://nanakidesu.github.io/Bananaki","root":"/Bananaki/","statics":"/","favicon":{"normal":"images/favicon.ico","hidden":"images/failure.ico"},"darkmode":"ture","auto_scroll":true,"js":{"waline":"https://unpkg.com/@waline/client@v3/dist/waline.umd.js","chart":"npm/frappe-charts@1.5.0/dist/frappe-charts.min.iife.min.js","copy_tex":"npm/katex@0.12.0/dist/contrib/copy-tex.min.js","fancybox":"combine/npm/jquery@3.5.1/dist/jquery.min.js,npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js,npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"},"css":{"waline":"https://unpkg.com/@waline/client@v3/dist/waline.css","katex":"npm/katex@0.12.0/dist/katex.min.css","mermaid":"css/mermaid.css","fancybox":"combine/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css,npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"},"loader":{"start":true,"switch":true},"search":{"applicationID":"3E5IXWGRYS","apiKey":"c56f99fe7b418ffe491bee5fb89cfe82","indexName":"blog","hits":{"per_page":10}},"waline":{"serverURL":"https://bananaki-waline.vercel.app","lang":"zh-CN","pageSize":10,"pageview":true,"login":"enable","emoji":["https://unpkg.com/@waline/emojis@1.1.0/qq","https://unpkg.com/@waline/emojis@1.1.0/alus"]},"quicklink":{"timeout":3000,"priority":true},"audio":[{"title":"列表1","list":["https://music.163.com/#/playlist?id=10182123823"]},{"title":"列表2","list":["https://music.163.com/#/playlist?id=10017270914"]}],"fireworks":["rgba(255,182,185,.9)","rgba(250,227,217,.9)","rgba(187,222,214,.9)","rgba(138,198,209,.9)"]};const getRndInteger = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -2312,6 +2312,25 @@ function loadWalineRecentComments() {
   request.send();
 }
 
+function installLegacyEmojiFallback() {
+  var root = document.querySelector('#comments');
+  if (!root) return;
+
+  var replaceImages = function() {
+    root.querySelectorAll('img[src*="MiniValine/qq"]').forEach(function(image) {
+      var filename = image.src.split('/').pop();
+      if (filename === 'qq-18.gif' || filename === 'qq-64.gif' || filename === 'qq-95.gif') {
+        image.src = CONFIG.root + 'images/emojis/qq/' + filename;
+      }
+    });
+  };
+
+  if (window.legacyEmojiObserver) window.legacyEmojiObserver.disconnect();
+  replaceImages();
+  window.legacyEmojiObserver = new MutationObserver(replaceImages);
+  window.legacyEmojiObserver.observe(root, { childList: true, subtree: true });
+}
+
 const siteRefresh = function (reload) {
 
   setTimeout(loadWalineRecentComments, 300);
@@ -2331,7 +2350,8 @@ const siteRefresh = function (reload) {
     options.path = LOCAL.path;
     options.dark = 'html[data-theme="dark"]';
 
-    window.walineInstance = Waline.init(options);
+      window.walineInstance = Waline.init(options);
+      installLegacyEmojiFallback();
 
     setTimeout(function(){
       positionInit(1);
