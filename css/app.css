@@ -6291,3 +6291,33 @@ span.label {
   vertical-align: -0.24em;
   object-fit: contain;
 }
+#comments .bananaki-user-tag {
+  display: inline-block;
+  margin-left: 0.4em;
+  padding: 0.08em 0.48em;
+  border: 0.0625rem solid currentColor;
+  border-radius: 0.35em;
+  font-size: 0.72em;
+  font-weight: 600;
+  line-height: 1.35;
+  vertical-align: 0.08em;
+  white-space: nowrap;
+}
+#comments .bananaki-user-tag-visitor {
+  color: var(--grey-5);
+}
+#comments .bananaki-user-tag-afk {
+  color: var(--color-red);
+}
+#comments .bananaki-user-tag-mseeu {
+  color: var(--color-orange);
+}
+#comments .bananaki-user-tag-friend {
+  color: var(--color-yellow);
+}
+#comments .bananaki-user-tag-wseeu {
+  color: var(--color-pink);
+}
+#comments .bananaki-user-tag-admin {
+  color: var(--color-blue);
+}

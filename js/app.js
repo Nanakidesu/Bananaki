@@ -2331,6 +2331,42 @@ function installLegacyEmojiFallback() {
   window.legacyEmojiObserver.observe(root, { childList: true, subtree: true });
 }
 
+function installWalineUserTags() {
+  var root = document.querySelector('#comments');
+  if (!root) return;
+
+  var tagMeta = {
+    '4d82d2d5eb895aa546adb15909c736f8': { key: 'afk', text: '无法连接' },
+    '44686996ad7bb39b173921f3de30a20f': { key: 'mseeu', text: '男性声优' },
+    '44686996ad7bb39b173921f7de30a20f': { key: 'friend', text: '伙伴' },
+    '0eab5cedc2ee834ba1061c0f112667e0': { key: 'wseeu', text: '女性声优' },
+    '41b8ff29dc5048d630a2e0f841147777': { key: 'admin', text: '站主' },
+    '8b3c3e26fd57908d74ba8cdcfa89e969': { key: 'admin', text: '站主' }
+  };
+
+  var renderTags = function() {
+    root.querySelectorAll('.wl-card').forEach(function(card) {
+      var nick = card.querySelector('.wl-nick');
+      var avatar = card.querySelector('img.wl-user-avatar, .wl-avatar img, img[src*="/avatar/"]');
+      if (!nick || !avatar || card.querySelector('.bananaki-user-tag')) return;
+
+      var matched = (avatar.getAttribute('src') || '').match(/\/avatar\/([a-f0-9]{32})/i);
+      var tag = matched && tagMeta[matched[1].toLowerCase()];
+      if (!tag) tag = { key: 'visitor', text: '其皆无名' };
+
+      var badge = document.createElement('span');
+      badge.className = 'bananaki-user-tag bananaki-user-tag-' + tag.key;
+      badge.textContent = tag.text;
+      nick.insertAdjacentElement('afterend', badge);
+    });
+  };
+
+  if (window.walineUserTagObserver) window.walineUserTagObserver.disconnect();
+  renderTags();
+  window.walineUserTagObserver = new MutationObserver(renderTags);
+  window.walineUserTagObserver.observe(root, { childList: true, subtree: true });
+}
+
 const siteRefresh = function (reload) {
 
   setTimeout(loadWalineRecentComments, 300);
@@ -2352,6 +2388,7 @@ const siteRefresh = function (reload) {
 
       window.walineInstance = Waline.init(options);
       installLegacyEmojiFallback();
+      installWalineUserTags();
 
     setTimeout(function(){
       positionInit(1);
