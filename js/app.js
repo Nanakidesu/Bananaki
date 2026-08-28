@@ -2260,13 +2260,12 @@ function loadWalineRecentComments() {
   var server = CONFIG.waline.serverURL;
   if (server.endsWith('/')) server = server.slice(0, -1);
 
-  fetch(server + '/api/comment?type=recent&count=5&lang=' + encodeURIComponent(CONFIG.waline.lang || 'zh-CN'))
-    .then(function(response) {
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      return response.json();
-    })
-    .then(function(result) {
-      var comments = result.data || [];
+  var request = new XMLHttpRequest();
+  request.open('GET', server + '/api/comment?type=recent&count=10&lang=' + encodeURIComponent(CONFIG.waline.lang || 'zh-CN'), true);
+  request.onload = function() {
+    if (request.status >= 200 && request.status < 300) {
+      var result = JSON.parse(request.responseText);
+      var comments = Array.isArray(result.data) ? result.data : [];
       list.innerHTML = '';
 
       comments.forEach(function(item) {
@@ -2288,15 +2287,25 @@ function loadWalineRecentComments() {
         li.appendChild(link);
         list.appendChild(li);
       });
-    })
-    .catch(function(error) {
-      console.error('Waline recent comments failed to load:', error);
-    });
+
+      if (!comments.length) {
+        list.innerHTML = '<li class="item">暂无评论</li>';
+      }
+    } else {
+      list.innerHTML = '<li class="item">最新评论加载失败</li>';
+      console.error('Waline recent comments failed to load: HTTP ' + request.status);
+    }
+  };
+  request.onerror = function() {
+    list.innerHTML = '<li class="item">最新评论加载失败</li>';
+    console.error('Waline recent comments network error');
+  };
+  request.send();
 }
 
 const siteRefresh = function (reload) {
 
-  loadWalineRecentComments();
+  setTimeout(loadWalineRecentComments, 300);
 
   if (LOCAL.waline && $('#comments')) {
     vendorCss('waline');
