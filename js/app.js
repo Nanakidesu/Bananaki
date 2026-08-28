@@ -2345,7 +2345,7 @@ function installWalineUserTags() {
   };
 
   var renderTags = function() {
-    root.querySelectorAll('.wl-card').forEach(function(card) {
+    root.querySelectorAll('.wl-card-item').forEach(function(card) {
       var nick = card.querySelector('.wl-nick');
       var avatar = card.querySelector('img.wl-user-avatar, .wl-avatar img, img[src*="/avatar/"]');
       if (!nick || !avatar || card.querySelector('.bananaki-user-tag')) return;
