@@ -6270,6 +6270,11 @@ span.label {
 .waline-recent-comment .waline-recent-preview {
   display: block;
 }
+.waline-recent-comment .waline-recent-nick {
+  font-size: 0.8125em;
+  line-height: 1.2rem;
+  max-height: 1.2rem;
+}
 .waline-recent-comment .waline-recent-preview {
   overflow: hidden;
   text-overflow: ellipsis;
