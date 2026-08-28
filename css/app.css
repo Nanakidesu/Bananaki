@@ -6275,3 +6275,14 @@ span.label {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+#comments .wl-content img.emoji,
+#comments .wl-content img.wl-emoji,
+#comments .wl-content img[src*="/images/emojis/"] {
+  display: inline-block !important;
+  width: 1.35em !important;
+  height: 1.35em !important;
+  max-width: none !important;
+  margin: 0 0.12em !important;
+  vertical-align: -0.24em;
+  object-fit: contain;
+}
