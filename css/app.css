@@ -6266,3 +6266,12 @@ span.label {
     padding: 0.16rem 0.42rem;
   }
 }
+.waline-recent-comment .waline-recent-nick,
+.waline-recent-comment .waline-recent-preview {
+  display: block;
+}
+.waline-recent-comment .waline-recent-preview {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -2281,8 +2281,17 @@ function loadWalineRecentComments() {
         temp.innerHTML = item.comment || '';
         var preview = (temp.textContent || temp.innerText || '').trim();
         if (preview.length > 42) preview = preview.slice(0, 42) + '…';
-        link.textContent = (item.nick || '访客') + '：' + preview;
-        link.title = link.textContent;
+        var nick = document.createElement('span');
+        nick.className = 'waline-recent-nick';
+        nick.textContent = item.nick || '访客';
+
+        var content = document.createElement('span');
+        content.className = 'waline-recent-preview';
+        content.textContent = preview;
+
+        link.title = nick.textContent + '：' + preview;
+        link.appendChild(nick);
+        link.appendChild(content);
 
         li.appendChild(link);
         list.appendChild(li);
