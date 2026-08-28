@@ -1,4 +1,4 @@
-var CONFIG = {"version":"0.2.5","hostname":"https://nanakidesu.github.io/Bananaki","root":"/Bananaki/","statics":"/","favicon":{"normal":"images/favicon.ico","hidden":"images/failure.ico"},"darkmode":"ture","auto_scroll":true,"js":{"valine":"gh/amehime/MiniValine@4.2.2-beta10/dist/MiniValine.min.js","chart":"npm/frappe-charts@1.5.0/dist/frappe-charts.min.iife.min.js","copy_tex":"npm/katex@0.12.0/dist/contrib/copy-tex.min.js","fancybox":"combine/npm/jquery@3.5.1/dist/jquery.min.js,npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js,npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"},"css":{"valine":"css/comment.css","katex":"npm/katex@0.12.0/dist/katex.min.css","mermaid":"css/mermaid.css","fancybox":"combine/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css,npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"},"loader":{"start":true,"switch":true},"search":{"applicationID":"3E5IXWGRYS","apiKey":"c56f99fe7b418ffe491bee5fb89cfe82","indexName":"blog","hits":{"per_page":10}},"valine":{"appId":"FNU97NwwcuWHVa0AQ8iKuFgy-MdYXbMMI","appKey":"Qx16B30wHCdulIBQRQrsWsDM","placeholder":"ヽ(○´∀`)ﾉ♪","avatar":"Gravatar","pageSize":10,"lang":"en","visitor":true,"NoRecordIP":false,"serverURLs":"https://fnu97nww.api.lncldglobal.com","powerMode":true,"tagMeta":{"visitor":"其皆无名","afk":"无法连接","mseeu":"男性声优","friend":"伙伴","wseeu":"女性声优","admin":"站主"},"tagColor":{"afk":"var(--color-red)","mseeu":"var(--color-orange)","friend":"var(--color-yellow)","wseeu":"var(--color-pink)","admin":"var(--color-blue)"},"tagMember":{"afk":["4d82d2d5eb895aa546adb15909c736f8"],"mseeu":["44686996ad7bb39b173921f3de30a20f"],"friend":["44686996ad7bb39b173921f7de30a20f"],"wseeu":["0eab5cedc2ee834ba1061c0f112667e0"],"admin":["41b8ff29dc5048d630a2e0f841147777","8b3c3e26fd57908d74ba8cdcfa89e969"]}},"quicklink":{"timeout":3000,"priority":true},"audio":[{"title":"列表1","list":["https://music.163.com/#/playlist?id=10182123823"]},{"title":"列表2","list":["https://music.163.com/#/playlist?id=10017270914"]}],"fireworks":["rgba(255,182,185,.9)","rgba(250,227,217,.9)","rgba(187,222,214,.9)","rgba(138,198,209,.9)"]};const getRndInteger = function (min, max) {
+var CONFIG = {"version":"0.2.5","hostname":"https://nanakidesu.github.io/Bananaki","root":"/Bananaki/","statics":"/","favicon":{"normal":"images/favicon.ico","hidden":"images/failure.ico"},"darkmode":"ture","auto_scroll":true,"js":{"waline":"https://unpkg.com/@waline/client@v3/dist/waline.js","chart":"npm/frappe-charts@1.5.0/dist/frappe-charts.min.iife.min.js","copy_tex":"npm/katex@0.12.0/dist/contrib/copy-tex.min.js","fancybox":"combine/npm/jquery@3.5.1/dist/jquery.min.js,npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js,npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"},"css":{"waline":"https://unpkg.com/@waline/client@v3/dist/waline.css","katex":"npm/katex@0.12.0/dist/katex.min.css","mermaid":"css/mermaid.css","fancybox":"combine/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css,npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"},"loader":{"start":true,"switch":true},"search":{"applicationID":"3E5IXWGRYS","apiKey":"c56f99fe7b418ffe491bee5fb89cfe82","indexName":"blog","hits":{"per_page":10}},"waline":{"serverURL":"https://bananaki-waline.vercel.app","lang":"zh-CN","pageSize":10,"pageview":true,"login":"enable"},"quicklink":{"timeout":3000,"priority":true},"audio":[{"title":"列表1","list":["https://music.163.com/#/playlist?id=10182123823"]},{"title":"列表2","list":["https://music.163.com/#/playlist?id=10017270914"]}],"fireworks":["rgba(255,182,185,.9)","rgba(250,227,217,.9)","rgba(187,222,214,.9)","rgba(138,198,209,.9)"]};const getRndInteger = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -2052,7 +2052,7 @@ const loadComments = function () {
   } else {
     var io = new IntersectionObserver(function(entries, observer) {
       var entry = entries[0];
-      vendorCss('valine');
+      vendorCss('waline');
       if (entry.isIntersecting || entry.intersectionRatio > 0) {
         transition($('#comments'), 'bounceUpIn');
         observer.disconnect();
@@ -2255,23 +2255,30 @@ function fixCommentLinks() {
 
 const siteRefresh = function (reload) {
 
-  vendorJs('valine', function() {
-    var options = Object.assign({}, CONFIG.valine);
-    options = Object.assign(options, LOCAL.valine||{});
+  if (LOCAL.waline && $('#comments')) {
+    vendorCss('waline');
+    if (window.walineInstance && window.walineInstance.destroy) {
+      window.walineInstance.destroy();
+    }
+
+    import(assetUrl('js', 'waline')).then(function(module) {
+    var options = Object.assign({}, CONFIG.waline);
+    options = Object.assign(options, LOCAL.waline === true ? {} : LOCAL.waline);
     options.el = '#comments';
     // pathname不加 /Bananaki/, 保持相对路径即可
     options.pathname = LOCAL.path.replace(/^\//, '');
-    options.pjax = pjax;
-    options.lazyload = lazyload;
+    options.path = LOCAL.path;
+    options.dark = 'html[data-theme="dark"]';
 
-    new MiniValine(options);
+    window.walineInstance = module.init(options);
 
     setTimeout(function(){
       positionInit(1);
-      postFancybox('.v');
-      fixCommentLinks();
     }, 1000);
-  }, window.MiniValine);
+    }).catch(function(error) {
+      console.error('Waline failed to load:', error);
+    });
+  }
 
   if(!reload) {
     $.each('script[data-pjax]', pjaxScript);
