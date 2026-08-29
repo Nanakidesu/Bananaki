@@ -2349,7 +2349,15 @@ function installWalineUserTags() {
     root.querySelectorAll('.wl-card-item').forEach(function(card) {
       var nick = card.querySelector('.wl-nick');
       var avatar = card.querySelector('img.wl-user-avatar, .wl-avatar img, img[src*="/avatar/"]');
-      if (!nick || !avatar || card.querySelector('.bananaki-user-tag')) return;
+      var customBadge = card.querySelector('.bananaki-user-tag');
+      var nativeBadge = card.querySelector('.wl-badge');
+
+      if (nativeBadge && nativeBadge.textContent.trim()) {
+        if (customBadge) customBadge.remove();
+        return;
+      }
+
+      if (!nick || !avatar || customBadge) return;
 
       var matched = (avatar.getAttribute('src') || '').match(/\/avatar\/([a-f0-9]{32})/i);
       var tag = matched && tagMeta[matched[1].toLowerCase()];
