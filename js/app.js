@@ -2345,6 +2345,10 @@ function installWalineUserTags() {
     'e91481be87278cc6023f5661fae84a03': { key: 'admin', text: '站主' }
   };
 
+  var avatarOverrides = {
+    'e91481be87278cc6023f5661fae84a03': CONFIG.root + 'images/waline-avatar-admin.png'
+  };
+
   var renderTags = function() {
     root.querySelectorAll('.wl-card-item').forEach(function(card) {
       var nick = card.querySelector('.wl-nick');
@@ -2352,15 +2356,23 @@ function installWalineUserTags() {
       var customBadge = card.querySelector('.bananaki-user-tag');
       var nativeBadge = card.querySelector('.wl-badge');
 
+      if (!avatar) return;
+
+      var matched = (avatar.getAttribute('src') || '').match(/\/avatar\/([a-f0-9]{32})/i);
+      var mailHash = matched && matched[1].toLowerCase();
+
+      if (mailHash && avatarOverrides[mailHash]) {
+        avatar.src = avatarOverrides[mailHash];
+      }
+
       if (nativeBadge && nativeBadge.textContent.trim()) {
         if (customBadge) customBadge.remove();
         return;
       }
 
-      if (!nick || !avatar || customBadge) return;
+      if (!nick || customBadge) return;
 
-      var matched = (avatar.getAttribute('src') || '').match(/\/avatar\/([a-f0-9]{32})/i);
-      var tag = matched && tagMeta[matched[1].toLowerCase()];
+      var tag = mailHash && tagMeta[mailHash];
       if (!tag) tag = { key: 'visitor', text: '其皆无名' };
 
       var badge = document.createElement('span');
