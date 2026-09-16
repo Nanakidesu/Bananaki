@@ -28,15 +28,15 @@
 <link rel="canonical" href="https://bananaki.is-a.dev/memory-camera/">
 
 
-<meta name="description" content="把一张照片，变成一段记忆模拟取景、对焦与快门，导出属于你的短 GIF。日本語中文English        ▣拖入、粘贴或选择一张图片支持 JPG、PNG、WebP选择图片图片仅在你的浏览器中处理，不会上传到服务器。            取景风格手机相机胶片                取景参数         闪光灯自动开启关闭倍率0.5×1×2×3×时间         ISO光">
+<meta name="description" content="把一张照片，变成一段记忆模拟取景、对焦与快门，导出属于你的短 GIF。日本語中文English        ▣拖入、粘贴或选择一张图片支持 JPG、PNG、WebP选择图片图片仅在你的浏览器中处理，不会上传到服务器。            播放记忆保存 PNG导出 GIF       取景风格手机相机胶片                取景参数         闪光灯自动开启关闭倍率0.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="记忆相机">
 <meta property="og:url" content="https://bananaki.is-a.dev/memory-camera/index.html">
 <meta property="og:site_name" content="死にたい自分を押し殺して">
-<meta property="og:description" content="把一张照片，变成一段记忆模拟取景、对焦与快门，导出属于你的短 GIF。日本語中文English        ▣拖入、粘贴或选择一张图片支持 JPG、PNG、WebP选择图片图片仅在你的浏览器中处理，不会上传到服务器。            取景风格手机相机胶片                取景参数         闪光灯自动开启关闭倍率0.5×1×2×3×时间         ISO光">
+<meta property="og:description" content="把一张照片，变成一段记忆模拟取景、对焦与快门，导出属于你的短 GIF。日本語中文English        ▣拖入、粘贴或选择一张图片支持 JPG、PNG、WebP选择图片图片仅在你的浏览器中处理，不会上传到服务器。            播放记忆保存 PNG导出 GIF       取景风格手机相机胶片                取景参数         闪光灯自动开启关闭倍率0.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-09-16T11:00:00.000Z">
-<meta property="article:modified_time" content="2026-09-16T03:06:54.090Z">
+<meta property="article:modified_time" content="2026-09-16T03:13:21.726Z">
 <meta property="article:author" content="米饭バナナキ">
 <meta name="twitter:card" content="summary">
 
@@ -100,12 +100,12 @@ Ba nanaki = 死にたい自分を押し殺して</title>
       </div>
       <div id="imgs" class="pjax">
         <ul>
-          <li class="item" data-background-image="/images/imageslist/bg.jpg?683721"></li>
-          <li class="item" data-background-image="/images/imageslist/bg.jpg?110554"></li>
-          <li class="item" data-background-image="/images/imageslist/bg.jpg?537580"></li>
-          <li class="item" data-background-image="/images/imageslist/bg.jpg?834426"></li>
-          <li class="item" data-background-image="/images/imageslist/bg.jpg?48667"></li>
-          <li class="item" data-background-image="/images/imageslist/bg.jpg?183724"></li>
+          <li class="item" data-background-image="/images/imageslist/bg.jpg?191422"></li>
+          <li class="item" data-background-image="/images/imageslist/bg.jpg?473033"></li>
+          <li class="item" data-background-image="/images/imageslist/bg.jpg?496535"></li>
+          <li class="item" data-background-image="/images/imageslist/bg.jpg?382285"></li>
+          <li class="item" data-background-image="/images/imageslist/bg.jpg?695673"></li>
+          <li class="item" data-background-image="/images/imageslist/bg.jpg?299914"></li>
         </ul>
       </div>
     </header>
@@ -149,6 +149,7 @@ Ba nanaki = 死にたい自分を押し殺して</title>
   <div class="mc-layout">
     <section class="mc-stage-card"><div class="mc-stage"><div class="mc-drop" id="mc-drop"><span class="mc-drop-icon">▣</span><strong data-i18n="drop">拖入、粘贴或选择一张图片</strong><small data-i18n="formats">支持 JPG、PNG、WebP</small><label class="mc-file-label"><span data-i18n="choose">选择图片</span><input id="mc-file" type="file" accept="image/*"></label></div><canvas id="mc-canvas"></canvas></div><p class="mc-privacy" data-i18n="privacy">图片仅在你的浏览器中处理，不会上传到服务器。</p></section>
     <aside class="mc-controls">
+      <div class="mc-group mc-action-top"><div class="mc-actions"><button class="mc-primary" id="mc-play" disabled data-i18n="play">播放记忆</button><button id="mc-png" disabled data-i18n="png">保存 PNG</button><button id="mc-gif" disabled data-i18n="gif">导出 GIF</button></div><div class="mc-progress" id="mc-progress"><div class="mc-progress-track"><div class="mc-progress-bar" id="mc-progress-bar"></div></div><div class="mc-progress-text" id="mc-progress-text"></div></div><div class="mc-toast" id="mc-toast"></div></div>
       <div class="mc-group"><span class="mc-label" data-i18n="style">取景风格</span><div class="mc-segments" id="mc-styles"><button data-value="phone" class="active" data-i18n="phone">手机</button><button data-value="camera" data-i18n="camera">相机</button><button data-value="film" data-i18n="film">胶片</button></div></div>
       <div class="mc-group mc-params">
         <span class="mc-label" data-i18n="parameters">取景参数</span>
@@ -160,8 +161,6 @@ Ba nanaki = 死にたい自分を押し殺して</title>
       <div class="mc-group"><span class="mc-label" data-i18n="orientation">画面方向</span><div class="mc-segments" id="mc-orientation"><button data-value="landscape" class="active" data-i18n="landscape">横向</button><button data-value="portrait" data-i18n="portrait">纵向</button></div><label class="mc-check"><input type="checkbox" id="mc-shoot"><span data-i18n="shootEffect">拍摄效果</span></label></div>
       <div class="mc-group mc-caption-controls"><label class="mc-label" for="mc-caption" data-i18n="caption">记忆文字</label><textarea id="mc-caption" maxlength="80" data-placeholder="captionPlaceholder" placeholder="写下此刻想记住的话……"></textarea><div class="mc-caption-grid mc-space"><label><span data-i18n="font">字体</span><select id="mc-font"><option value="sans" data-i18n="fontSans">无衬线</option><option value="serif" data-i18n="fontSerif">衬线</option><option value="hand" data-i18n="fontHand">手写</option><option value="mono" data-i18n="fontMono">等宽</option></select></label><label class="mc-inline-range"><span data-i18n="position">位置</span><input type="range" id="mc-caption-y" min="8" max="92" value="86"><output id="mc-caption-y-value">86%</output></label></div><div class="mc-segments mc-space" id="mc-colors"><button data-value="white" class="active" data-i18n="white">白色</button><button data-value="black" data-i18n="black">黑色</button><button data-value="yellow" data-i18n="yellow">黄色</button><button data-value="pink" data-i18n="pink">粉色</button><button data-value="blue" data-i18n="blue">蓝色</button><label class="mc-color-picker" data-i18n-title="customColor"><input type="color" id="mc-custom-color" value="#ffffff"></label></div><label class="mc-size-control"><span data-i18n="fontSize">字号</span><input type="range" id="mc-font-size" min="18" max="64" value="32"><output id="mc-font-size-value">32</output></label><div class="mc-check-row"><label class="mc-check"><input type="checkbox" id="mc-bold" checked><span data-i18n="bold">粗体</span></label><label class="mc-check"><input type="checkbox" id="mc-italic"><span data-i18n="italic">斜体</span></label><label class="mc-check"><input type="checkbox" id="mc-stroke" checked><span data-i18n="stroke">描边</span></label></div></div>
       <div class="mc-group"><span class="mc-label" data-i18n="quality">导出尺寸</span><div class="mc-segments" id="mc-sizes"><button data-value="480" data-i18n="small">小</button><button data-value="720" class="active" data-i18n="medium">中</button><button data-value="960" data-i18n="large">大</button></div><label class="mc-check"><input type="checkbox" id="mc-loop" checked><span data-i18n="loop">循环播放 GIF</span></label></div>
-      <div class="mc-actions"><button class="mc-primary" id="mc-play" disabled data-i18n="play">播放记忆</button><button id="mc-png" disabled data-i18n="png">保存 PNG</button><button id="mc-gif" disabled data-i18n="gif">导出 GIF</button></div>
-      <div class="mc-progress" id="mc-progress"><div class="mc-progress-track"><div class="mc-progress-bar" id="mc-progress-bar"></div></div><div class="mc-progress-text" id="mc-progress-text"></div></div><div class="mc-toast" id="mc-toast"></div>
     </aside>
   </div>
 </div>
@@ -178,7 +177,7 @@ Ba nanaki = 死にたい自分を押し殺して</title>
       <i class="ic i-calendar-check"></i>
     </span>
     <span class="text">更新于</span>
-    <time title="修改时间：2026-09-16 12:06:54" itemprop="dateModified" datetime="2026-09-16T12:06:54+09:00">2026-09-16</time>
+    <time title="修改时间：2026-09-16 12:13:21" itemprop="dateModified" datetime="2026-09-16T12:13:21+09:00">2026-09-16</time>
   </span>
   <span class="item" title="阅读次数">
       <span class="icon">
@@ -378,26 +377,6 @@ Ba nanaki = 死にたい自分を押し殺して</title>
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/categories/nihongo/" title="分类于 日語学習">日語学習</a>
-</div>
-
-    <span><a href="/2025/07/22/%E6%97%A5%E8%AF%AD%E5%AD%A6%E4%B9%A0-%E5%A4%A7%E9%98%AA%E5%BC%81%E7%AF%87/" title="日語&lt;ruby&gt;学習&lt;rt&gt;がくしゅう&lt;&#x2F;rt&gt;&lt;&#x2F;ruby&gt;ガイド：大阪篇">日語<ruby>学習<rt>がくしゅう</rt></ruby>ガイド：大阪篇</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/categories/wseeu/" title="分类于 女性声优">女性声优</a>
-</div>
-
-    <span><a href="/2025/07/21/%E5%A5%B3%E6%80%A7%E5%A3%B0%E4%BC%98%E2%80%94%E2%80%94%E6%97%A5%E7%AC%A0%E9%98%B3%E5%AD%90/" title="声优专题：日笠陽子——无与伦比的声线魅力与人格魅力">声优专题：日笠陽子——无与伦比的声线魅力与人格魅力</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
 <a href="/categories/wseeu/" title="分类于 女性声优">女性声优</a>
 </div>
 
@@ -408,50 +387,10 @@ Ba nanaki = 死にたい自分を押し殺して</title>
   <li class="item">
     
 <div class="breadcrumb">
-<a href="/categories/wseeu/" title="分类于 女性声优">女性声优</a>
+<a href="/categories/nihongo/" title="分类于 日語学習">日語学習</a>
 </div>
 
-    <span><a href="/2025/07/25/%E5%A5%B3%E6%80%A7%E5%A3%B0%E4%BC%98%E2%80%94%E2%80%94%E9%80%B2%E8%97%A4%E3%81%82%E3%81%BE%E3%81%AD/" title="声优专题：進藤あまね——从邦邦主唱到拉拉新星的多彩旅程">声优专题：進藤あまね——从邦邦主唱到拉拉新星的多彩旅程</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/categories/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95/" title="分类于 生活记录">生活记录</a>
-</div>
-
-    <span><a href="/2026/08/31/2026-08-31-lucid-dream-unknown-companion/" title="我记得TA存在，却不记得TA是谁——一次特殊清醒梦记录">我记得TA存在，却不记得TA是谁——一次特殊清醒梦记录</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/" title="分类于 开发日志">开发日志</a>
-</div>
-
-    <span><a href="/2025/07/21/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88/" title="音乐播放功能启用">音乐播放功能启用</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/categories/%E5%A5%B3%E6%80%A7%E5%81%B6%E5%83%8F/" title="分类于 女性偶像">女性偶像</a>
-</div>
-
-    <span><a href="/2026/08/29/Ayase-Kotori-Chimakotori/" title="綾瀬ことり——从「ちまことり」开始的唯一推">綾瀬ことり——从「ちまことり」开始的唯一推</a></span>
-  </li>
-
-      
-  <li class="item">
-    
-<div class="breadcrumb">
-<a href="/categories/wseeu/" title="分类于 女性声优">女性声优</a>
-</div>
-
-    <span><a href="/2025/07/30/%E5%A5%B3%E6%80%A7%E5%A3%B0%E4%BC%98-%E5%A4%A7%E8%A5%BF%E6%B2%99%E7%B9%94/" title="声优专题：大西沙織——败犬角色的绝对主力">声优专题：大西沙織——败犬角色的绝对主力</a></span>
+    <span><a href="/2025/07/22/%E6%97%A5%E8%AF%AD%E5%AD%A6%E4%B9%A0-%E4%BA%AC%E9%83%BD%E5%BC%81%E7%AF%87/" title="日語&lt;ruby&gt;学習&lt;rt&gt;がくしゅう&lt;&#x2F;rt&gt;&lt;&#x2F;ruby&gt;ガイド：京都篇">日語<ruby>学習<rt>がくしゅう</rt></ruby>ガイド：京都篇</a></span>
   </li>
 
       
@@ -471,7 +410,67 @@ Ba nanaki = 死にたい自分を押し殺して</title>
 <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/" title="分类于 开发日志">开发日志</a>
 </div>
 
+    <span><a href="/2025/07/20/%E7%B1%B3%E9%A5%AD%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%BC%80%E8%AE%BE%E5%95%A6%EF%BC%81/" title="米饭个人网站开设啦！">米饭个人网站开设啦！</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/wseeu/" title="分类于 女性声优">女性声优</a>
+</div>
+
+    <span><a href="/2025/07/30/%E5%A5%B3%E6%80%A7%E5%A3%B0%E4%BC%98-%E5%A4%A7%E8%A5%BF%E6%B2%99%E7%B9%94/" title="声优专题：大西沙織——败犬角色的绝对主力">声优专题：大西沙織——败犬角色的绝对主力</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/nihongo/" title="分类于 日語学習">日語学習</a>
+</div>
+
+    <span><a href="/2025/08/26/APEX%E4%B8%AD%E5%9B%BD%E8%AA%9E%E7%94%A8%E8%AA%9E-Keep-Updating/" title="APEX中国語用語(Keep Updating)">APEX中国語用語(Keep Updating)</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/" title="分类于 开发日志">开发日志</a>
+</div>
+
     <span><a href="/2025/07/22/Debug-1-0-LeanCloud-Comments-URL/" title="【Debug】Hexo使用LeanCloud获取路径不适配问题">【Debug】Hexo使用LeanCloud获取路径不适配问题</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/" title="分类于 开发日志">开发日志</a>
+</div>
+
+    <span><a href="/2025/07/21/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88/" title="音乐播放功能启用">音乐播放功能启用</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/nihongo/" title="分类于 日語学習">日語学習</a>
+</div>
+
+    <span><a href="/2025/07/22/%E6%97%A5%E8%AF%AD%E5%AD%A6%E4%B9%A0-%E5%A4%A7%E9%98%AA%E5%BC%81%E7%AF%87/" title="日語&lt;ruby&gt;学習&lt;rt&gt;がくしゅう&lt;&#x2F;rt&gt;&lt;&#x2F;ruby&gt;ガイド：大阪篇">日語<ruby>学習<rt>がくしゅう</rt></ruby>ガイド：大阪篇</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/" title="分类于 开发日志">开发日志</a>
+</div>
+
+    <span><a href="/2026/08/28/Hexo-Shoka-Twitter-Pixiv-Pages/" title="【开发日志】为Hexo Shoka新增“动态”和“画作”页面">【开发日志】为Hexo Shoka新增“动态”和“画作”页面</a></span>
   </li>
 
   </ul>
